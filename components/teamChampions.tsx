@@ -7,9 +7,10 @@ interface Props {
     teamName: string,
     selectedChampion: Champion,
     setSelectedChampion: (selectedChampion: Champion) => void,
+    setActiveChamp: (activeChamp: string) => void
 }
 
-const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props) => {
+const TeamChampions = ({teamName, selectedChampion, setSelectedChampion, setActiveChamp }: Props) => {
 
     const cm = useContext(ChampionCtx)
 
@@ -18,6 +19,7 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
             const champions = structuredClone(cm?.mapChampions)!
 
         if(e.type === 'click'){
+            setActiveChamp("")
             if(selectedChampion.splashImage !== 'blank.webp'){
 
                 if(teamName === 'blue'){

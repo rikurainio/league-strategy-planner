@@ -8,15 +8,18 @@ interface Props {
     selectedChampion: Champion,
     setSelectedChampion: (selectedChampion: Champion) => void
     banneds: string[],
-    setBanneds: (banneds: string[]) => void
+    setBanneds: (banneds: string[]) => void,
+    setActiveChamp: (activeChamp: string) => void
 }
 
-const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds }: Props) => {
+const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds, setActiveChamp }: Props) => {
 
     const cm = useContext(ChampionCtx)
     const champions = {...cm?.mapChampions!}
 
     const handleImageClick = (e: any, idx: number) => {
+        setActiveChamp("")
+
         if(selectedChampion.image){
             if(e.type === 'click'){
                 if(selectedChampion.splashImage !== 'blank.webp'){

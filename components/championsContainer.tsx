@@ -8,6 +8,7 @@ import { ChampionCtx } from './championContext';
 
 const ChampionsContainer = () => {
     const [filter, setFilter] = useState('')
+    const [activeChamp, setActiveChamp] = useState<string>("")
     const [banneds, setBanneds] = useState([])
     const [selectedChampion, setSelectedChampion] = useState<Champion>({ name: '', image: '', splashImage: ''})
     const champions: Champion[] = getAllChampions()
@@ -33,8 +34,16 @@ const ChampionsContainer = () => {
         return false
     }
 
+    const isActiveChamp = (c: Champion) => {
+        if(activeChamp === c.name){
+            return true
+        }
+        return false
+    }
+
     const handleClickChampion = (e:any, c: Champion) => {
         setSelectedChampion(c)
+        setActiveChamp(c.name)
     }
 
     return (
@@ -53,6 +62,7 @@ const ChampionsContainer = () => {
                     setSelectedChampion={setSelectedChampion}
                     banneds={banneds}
                     setBanneds={setBanneds}
+                    setActiveChamp={setActiveChamp}
                 />
                 <TeamBans
                     teamName='red'
@@ -60,6 +70,7 @@ const ChampionsContainer = () => {
                     setSelectedChampion={setSelectedChampion}
                     banneds={banneds}
                     setBanneds={setBanneds}
+                    setActiveChamp={setActiveChamp}
                 />
             </div>
 
@@ -68,6 +79,8 @@ const ChampionsContainer = () => {
                     teamName='blue'
                     selectedChampion={selectedChampion} 
                     setSelectedChampion={setSelectedChampion}
+                    setActiveChamp={setActiveChamp}
+
                 />
 
                 <div className='w-full'>
@@ -91,21 +104,27 @@ const ChampionsContainer = () => {
 
                         onClick={(e) => {handleClickChampion(e,c)}}
                     >
-                        <div className="w-full">
-                            <Image
-                                src={c.image}
-                                width="76"
-                                height="76"
-                                className={`
-                                    cursor-pointer
-                                    rounded-md
-                                    hover:brightness-125
-                                    hover:scale-100`
-                                }
-                                alt={c.name}>
-                            </Image>
-                        </div>
-                        <div className="w-full truncate dark:text-gray-300 -mt-2">
+                        <Image
+                            src={c.image}
+                            width="76"
+                            height="76"
+                            className={`
+                                cursor-pointer
+                                rounded-lg
+                                hover:brightness-125
+                                hover:scale-100
+                                z-40
+                                ${isActiveChamp(c) ? 'outline outline-zinc-300' : ''}`
+                            }
+                            alt={c.name}>
+                        </Image>
+
+                        <div className={`
+                            w-full 
+                            truncate 
+                            dark:text-gray-300 
+                            -mt-2
+                            `}>
                             {c.name}
                         </div>
                     </div>
@@ -117,6 +136,8 @@ const ChampionsContainer = () => {
                     teamName='red'
                     selectedChampion={selectedChampion}
                     setSelectedChampion={setSelectedChampion}
+                    setActiveChamp={setActiveChamp}
+
                 />
             </div>
         </div>
