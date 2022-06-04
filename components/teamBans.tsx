@@ -16,12 +16,14 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
     const cm = useContext(ChampionCtx)
     const champions = {...cm?.mapChampions!}
 
-    const handleImageClick = (e: any) => {
+    const handleImageClick = (e: any, idx: number) => {
         if(selectedChampion.image){
             if(e.type === 'click'){
                 if(selectedChampion.splashImage !== 'blank.webp'){
                     (e.target as HTMLImageElement).setAttribute('srcset', selectedChampion.image);
                     (e.target as HTMLImageElement).setAttribute('id', selectedChampion.name);
+        
+ 
                     setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     const b = [...banneds]
                     b.push(selectedChampion.name)
@@ -39,7 +41,6 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                 setBanneds(updatedB)
             }
         }
-        
     }
 
     return (
@@ -70,8 +71,8 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                     src={'/blank.webp'}
                     alt="champion-name"
                     className="cursor-pointer rounded-sm"
-                    onContextMenu={(e) => {handleImageClick(e)}}
-                    onClick={(e) => {handleImageClick(e)}}
+                    onContextMenu={(e) => {handleImageClick(e, idx)}}
+                    onClick={(e) => {handleImageClick(e, idx)}}
                 >
                 </Image>
             </div>)}

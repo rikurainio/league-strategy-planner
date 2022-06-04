@@ -13,19 +13,26 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
 
     const cm = useContext(ChampionCtx)
 
-    const handleImageClick = (e: any) => {
+    const handleImageClick = (e: any, idx: number) => {
         if(selectedChampion.splashImage){
             const champions = structuredClone(cm?.mapChampions)!
 
         if(e.type === 'click'){
             if(selectedChampion.splashImage !== 'blank.webp'){
+
                 if(teamName === 'blue'){
+                    const div = document.getElementById("btext-" + idx)
+                    div!.textContent = selectedChampion.name
+
                     if(champions.blue.length < 5){
                         champions?.blue.push(selectedChampion)
                         cm?.setMapChampions(champions)
                     }
                 }
                 if(teamName === 'red'){
+                    const div = document.getElementById("rtext-" + idx)
+                    div!.textContent = selectedChampion.name
+
                     if(champions.red.length < 5){
                         champions?.red.push(selectedChampion)
                         cm?.setMapChampions(champions)
@@ -44,6 +51,9 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
             (e.target as HTMLImageElement).setAttribute('srcset', 'blank.webp');
 
             if(teamName === 'blue'){
+                const div = document.getElementById("btext-" + idx)
+                div!.textContent = ""
+
                 const imageId = (e.target as HTMLImageElement).getAttribute('id')
                 if(imageId !== "blank"){
                     const updatedBlueChampions = champions.blue.filter((c) => c.name !== imageId)
@@ -53,6 +63,9 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
                 }
             }
             if(teamName === 'red'){
+                const div = document.getElementById("rtext-" + idx)
+                div!.textContent = ""
+
                 const imageId = (e.target as HTMLImageElement).getAttribute('id')
                 if(imageId !== "blank"){
                     const updatedBlueChampions = champions.red.filter((c) => c.name !== imageId)
@@ -80,6 +93,14 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
                 className="w-60 h-[6rem] dark:bg-zinc-800 my-2 relative"
                 key={teamName + '-' + idx + 1}
             > 
+                    { teamName === 'blue' &&
+                    <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
+                    </div>}
+                    
+                    { teamName === 'red' &&
+                    <div id={"rtext-" + idx} className={`absolute z-50 ml-2 m-1`}>
+                    </div>}
+
                     <Image
                         id={"blank"}
                         layout='fill'
@@ -88,8 +109,8 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion }: Props
                         src={'/blank.webp'}
                         alt="champion name"
                         className="cursor-pointer"
-                        onContextMenu={(e) => {handleImageClick(e)}}
-                        onClick={(e) => {handleImageClick(e)}}
+                        onContextMenu={(e) => {handleImageClick(e, idx)}}
+                        onClick={(e) => {handleImageClick(e, idx)}}
                     >
                     </Image>
             </div>)}
