@@ -11,7 +11,7 @@ const Navbar = () => {
             </div>
             <div className='mx-5'>
                 <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                    darkmode toggler
+                    darkmode
                 </button>
             </div>
         </div>
