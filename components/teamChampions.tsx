@@ -41,27 +41,45 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActi
                 else{
                     // clicked on a tile with champ
                     setSelectedChampion(c)
-                    console.log('previous champ:', previousChamp)
-                    console.log('selected a champ:', c)
 
-                    if(previousChamp !== null){
-                        console.log('swapping')
-                        const copyBlue = [...cm.mapChampions.blue]
-                        const current = c
-                        const currentIdx = idx
-                        const previous = previousChamp
-
-                        console.log('currentIdx:', currentIdx, 'previousIdx:', previous.idx)
-
-                        copyBlue[previous.idx] = current
-                        copyBlue[currentIdx] = previous
-                        cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
-                        setPreviousChamp(null)
+                    if(teamName === 'blue'){
+                        if(previousChamp !== null){
+                            console.log('swapping')
+                            const copyBlue = [...cm.mapChampions.blue]
+                            const current = c
+                            const currentIdx = idx
+                            const previous = previousChamp
+    
+                            copyBlue[previous.idx] = current
+                            copyBlue[currentIdx] = previous
+                            cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
+                            setPreviousChamp(null)
+                        }
+                        else{
+                            const cWithIndex = {...c, idx: idx}
+                            setPreviousChamp(cWithIndex)
+                        }
                     }
-                    else{
-                        const cWithIndex = {...c, idx: idx}
-                        setPreviousChamp(cWithIndex)
+                    if(teamName === 'red'){
+                        if(previousChamp !== null){
+                            console.log('swapping')
+                            const copyRed = [...cm.mapChampions.red]
+                            const current = c
+                            const currentIdx = idx
+                            const previous = previousChamp
+    
+                            copyRed[previous.idx] = current
+                            copyRed[currentIdx] = previous
+                            cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
+                            setPreviousChamp(null)
+                        }
+                        else{
+                            const cWithIndex = {...c, idx: idx}
+                            setPreviousChamp(cWithIndex)
+                        }
                     }
+
+                    
                     setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                 }
             }
