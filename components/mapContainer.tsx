@@ -27,20 +27,23 @@ export const MapContainer = () => {
           </Image>
 
           { champions.blue.map((c, idx) =>
-            <MapChampion
+            c.name !== "" &&
+              <MapChampion
               teamName="blue" 
               champion={c} 
               key={`draggable-blue-${c.name + '-' + idx}`}
               spawnPoint={getSpawnPoint('blue')}
               />
+            
           )}
           { champions.red.map((c, idx) =>
-            <MapChampion
-              teamName="red"
-              champion={c}
-              key={`draggable-red-${c.name + '-' + idx}`}
-              spawnPoint={getSpawnPoint('red')}
-              />
+            c.name !== "" &&
+              <MapChampion
+                teamName="red"
+                champion={c}
+                key={`draggable-red-${c.name + '-' + idx}`}
+                spawnPoint={getSpawnPoint('red')}
+                />
           )}
     </div>
   )
