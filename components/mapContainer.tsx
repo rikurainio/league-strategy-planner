@@ -13,7 +13,6 @@ export const MapContainer = () => {
     side === 'blue'
     ? spawnPoint = {x:25, y:600}
     : spawnPoint = {x:820, y:30}
-
     return spawnPoint
   }
 
@@ -27,19 +26,19 @@ export const MapContainer = () => {
           >
           </Image>
 
-          { champions.blue.map((c) =>
+          { champions.blue.map((c, idx) =>
             <MapChampion
               teamName="blue" 
               champion={c} 
-              key={`draggable-blue-${c.name}`}
+              key={`draggable-blue-${c.name + '-' + idx}`}
               spawnPoint={getSpawnPoint('blue')}
               />
           )}
-          { champions.red.map((c) =>
+          { champions.red.map((c, idx) =>
             <MapChampion
               teamName="red"
               champion={c}
-              key={`draggable-red-${c.name}`}
+              key={`draggable-red-${c.name + '-' + idx}`}
               spawnPoint={getSpawnPoint('red')}
               />
           )}

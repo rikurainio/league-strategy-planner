@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Champion } from '../utils/champion';
-import Image from 'next/image'
 import { ChampionCtx } from './championContext';
+import Image from 'next/image'
 
 interface Props {
     teamName: string,
@@ -10,74 +10,50 @@ interface Props {
     setActiveChamp: (activeChamp: string) => void
 }
 
-const TeamChampions = ({teamName, selectedChampion, setSelectedChampion, setActiveChamp }: Props) => {
+const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActiveChamp }: Props) => {
+    const cm = useContext(ChampionCtx)!
+    const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
 
-    const cm = useContext(ChampionCtx)
-
-    const handleImageClick = (e: any, idx: number) => {
+    const handleImageClick = (e: any, c: Champion ,idx: number) => {
         if(selectedChampion.splashImage){
-            const champions = structuredClone(cm?.mapChampions)!
+            if(e.type === 'click'){
+                setActiveChamp("")
 
-        if(e.type === 'click'){
-            setActiveChamp("")
-            if(selectedChampion.splashImage !== 'blank.webp'){
-
-                if(teamName === 'blue'){
-                    const div = document.getElementById("btext-" + idx)
-                    div!.textContent = selectedChampion.name
-
-                    if(champions.blue.length < 5){
-                        champions?.blue.push(selectedChampion)
-                        cm?.setMapChampions(champions)
+                if(selectedChampion.splashImage !== 'blank.webp'){
+                    if(teamName === 'blue'){
+                        const copyBlue = [...cm.mapChampions.blue]
+                        copyBlue[idx] = selectedChampion
+                        cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
+                    if(teamName === 'red'){
+                        const copyRed = [...cm.mapChampions.red]
+                        copyRed[idx] = selectedChampion
+                        cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     }
                 }
-                if(teamName === 'red'){
-                    const div = document.getElementById("rtext-" + idx)
-                    div!.textContent = selectedChampion.name
+            }
 
-                    if(champions.red.length < 5){
-                        champions?.red.push(selectedChampion)
-                        cm?.setMapChampions(champions)
+            // right click to remove champion from draft and map
+            if(e.type === "contextmenu"){
+                e.preventDefault();
+
+                if(c.splashImage !== 'blank.webp'){
+                    if(teamName === 'blue'){
+                        const copyBlue = [...cm.mapChampions.blue]
+                        copyBlue[idx] = blank
+                        cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
+                    if(teamName === 'red'){
+                        const copyRed = [...cm.mapChampions.red]
+                        copyRed[idx] = blank
+                        cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     }
                 }
-
-                (e.target as HTMLImageElement).setAttribute('srcset', selectedChampion.splashImage);
-                (e.target as HTMLImageElement).setAttribute('id', selectedChampion.name);
-                setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
             }
-        }
-
-        // right click to remove champion from draft and map
-        if(e.type === "contextmenu"){
-            e.preventDefault();
-            (e.target as HTMLImageElement).setAttribute('srcset', 'blank.webp');
-
-            if(teamName === 'blue'){
-                const div = document.getElementById("btext-" + idx)
-                div!.textContent = ""
-
-                const imageId = (e.target as HTMLImageElement).getAttribute('id')
-                if(imageId !== "blank"){
-                    const updatedBlueChampions = champions.blue.filter((c) => c.name !== imageId)
-                    console.log('imageid was:', imageId)
-                    champions.blue = updatedBlueChampions
-                    cm?.setMapChampions(champions)
-                }
-            }
-            if(teamName === 'red'){
-                const div = document.getElementById("rtext-" + idx)
-                div!.textContent = ""
-
-                const imageId = (e.target as HTMLImageElement).getAttribute('id')
-                if(imageId !== "blank"){
-                    const updatedBlueChampions = champions.red.filter((c) => c.name !== imageId)
-                    console.log('imageid was:', imageId)
-                    champions.red = updatedBlueChampions
-                    cm?.setMapChampions(champions)
-                }
-            }
-
-        }
         }
     }
 
@@ -90,29 +66,45 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion, setActi
             mx-4
             `} 
         >
-            {[...Array(5)].map((e, idx) =>
+            {teamName === 'blue' && cm?.mapChampions.blue.map((c, idx) =>
             <div
-                className="w-60 h-[6rem] dark:bg-zinc-800 my-2 relative"
-                key={teamName + '-' + idx + 1}
-            > 
-                    { teamName === 'blue' &&
+                className={`w-60 h-[6rem] dark:bg-zinc-800 ${idx > 0 && 'mt-6'} relative`}
+                key={teamName + '-' + idx}
+                > 
                     <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
-                    </div>}
-                    
-                    { teamName === 'red' &&
-                    <div id={"rtext-" + idx} className={`absolute z-50 ml-2 m-1`}>
-                    </div>}
-
+                        {c.name}
+                    </div>
                     <Image
                         id={"blank"}
                         layout='fill'
                         objectFit='cover'
                         objectPosition={'0px -12px'}
-                        src={'/blank.webp'}
+                        src={c.splashImage}
                         alt="champion name"
                         className="cursor-pointer"
-                        onContextMenu={(e) => {handleImageClick(e, idx)}}
-                        onClick={(e) => {handleImageClick(e, idx)}}
+                        onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                        onClick={(e) => {handleImageClick(e, c, idx)}}
+                    >
+                    </Image>
+            </div>)}
+            {teamName === 'red' && cm?.mapChampions.red.map((c, idx) =>
+            <div
+                className={`w-60 h-[6rem] dark:bg-zinc-800 ${idx > 0 && 'mt-6'} relative`}
+                key={teamName + '-' + idx}
+                > 
+                    <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
+                        {c.name}
+                    </div>
+                    <Image
+                        id={"blank"}
+                        layout='fill'
+                        objectFit='cover'
+                        objectPosition={'0px -12px'}
+                        src={c.splashImage}
+                        alt="champion name"
+                        className="cursor-pointer"
+                        onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                        onClick={(e) => {handleImageClick(e, c, idx)}}
                     >
                     </Image>
             </div>)}

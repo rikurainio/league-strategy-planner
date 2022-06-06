@@ -58,6 +58,7 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
             `}>
             {[...Array(5)].map((e, idx) =>
             <div
+                id={banneds[idx]}
                 key={teamName + '-' + idx + 1}
                 className={`
                 dark:bg-zinc-800
