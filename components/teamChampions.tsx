@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Champion } from '../utils/champion';
 import { ChampionCtx } from './championContext';
 import Image from 'next/image'
@@ -10,15 +10,20 @@ interface Props {
     setActiveChamp: (activeChamp: string) => void
 }
 
+interface ChampionWithIdx extends Champion {
+    idx: number
+}
+
 const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActiveChamp }: Props) => {
     const cm = useContext(ChampionCtx)!
     const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
+    const [previousChamp, setPreviousChamp] = useState<ChampionWithIdx | null>(null)
 
     const handleImageClick = (e: any, c: Champion ,idx: number) => {
         if(selectedChampion.splashImage){
+            // left click a draft tile
             if(e.type === 'click'){
                 setActiveChamp("")
-
                 if(selectedChampion.splashImage !== 'blank.webp'){
                     if(teamName === 'blue'){
                         const copyBlue = [...cm.mapChampions.blue]
@@ -33,9 +38,34 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActi
                         setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     }
                 }
-            }
+                else{
+                    // clicked on a tile with champ
+                    setSelectedChampion(c)
+                    console.log('previous champ:', previousChamp)
+                    console.log('selected a champ:', c)
 
-            // right click to remove champion from draft and map
+                    if(previousChamp !== null){
+                        console.log('swapping')
+                        const copyBlue = [...cm.mapChampions.blue]
+                        const current = c
+                        const currentIdx = idx
+                        const previous = previousChamp
+
+                        console.log('currentIdx:', currentIdx, 'previousIdx:', previous.idx)
+
+                        copyBlue[previous.idx] = current
+                        copyBlue[currentIdx] = previous
+                        cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
+                        setPreviousChamp(null)
+                    }
+                    else{
+                        const cWithIndex = {...c, idx: idx}
+                        setPreviousChamp(cWithIndex)
+                    }
+                    setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                }
+            }
+            // right click a draft tile
             if(e.type === "contextmenu"){
                 e.preventDefault();
 

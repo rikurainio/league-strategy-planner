@@ -8,24 +8,22 @@ interface Props {
     selectedChampion: Champion,
     setSelectedChampion: (selectedChampion: Champion) => void
     banneds: string[],
-    setBanneds: (banneds: string[]) => void,
+    setBanneds: (banneds: any) => void,
     setActiveChamp: (activeChamp: string) => void
 }
 
 const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds, setActiveChamp }: Props) => {
-
     const cm = useContext(ChampionCtx)
-    const champions = {...cm?.mapChampions!}
 
     const handleImageClick = (e: any, idx: number) => {
         setActiveChamp("")
 
         if(selectedChampion.image){
+            // left click a draft tile
             if(e.type === 'click'){
                 if(selectedChampion.splashImage !== 'blank.webp'){
                     (e.target as HTMLImageElement).setAttribute('srcset', selectedChampion.image);
                     (e.target as HTMLImageElement).setAttribute('id', selectedChampion.name);
-        
  
                     setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     const b = [...banneds]
@@ -33,7 +31,7 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                     setBanneds(b)
                 }
             }
-            // right click to remove champion from draft and map
+            // right click a draft tile
             if(e.type === "contextmenu"){
                 e.preventDefault();
                 (e.target as HTMLImageElement).setAttribute('srcset', 'blank.webp');
