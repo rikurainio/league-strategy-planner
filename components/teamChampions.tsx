@@ -140,6 +140,13 @@ const TeamChampions = ({
         }
     }
 
+    const checkActive = (c: Champion): boolean => {
+        if(previousChamp?.name === c.name){
+            return true
+        }
+        return false
+    }
+
     return (
         <div className={`
             flex 
@@ -151,8 +158,13 @@ const TeamChampions = ({
         >
             {teamName === 'blue' && cm?.mapChampions.blue.map((c, idx) =>
             <div
-                className={`w-60 h-[6rem] dark:bg-zinc-800 ${idx > 0 && 'mt-6'} relative`}
-                key={teamName + '-' + idx}
+                className={`
+                    w-60 h-[6rem] 
+                    dark:bg-zinc-800 
+                    relative
+                    ${idx > 0 && 'mt-6'}
+                    ${checkActive(c) && 'outline outline-zinc-300'}`}
+                    key={teamName + '-' + idx}
                 > 
                     <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
                         {c.name}
@@ -172,8 +184,13 @@ const TeamChampions = ({
             </div>)}
             {teamName === 'red' && cm?.mapChampions.red.map((c, idx) =>
             <div
-                className={`w-60 h-[6rem] dark:bg-zinc-800 ${idx > 0 && 'mt-6'} relative`}
-                key={teamName + '-' + idx}
+                className={`
+                    w-60 h-[6rem] 
+                    dark:bg-zinc-800 
+                    relative
+                    ${idx > 0 && 'mt-6'}
+                    ${checkActive(c) && 'outline outline-zinc-300'}`}
+                    key={teamName + '-' + idx}
                 > 
                     <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
                         {c.name}
