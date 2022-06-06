@@ -141,7 +141,7 @@ const TeamChampions = ({
     }
 
     const checkActive = (c: Champion): boolean => {
-        if(previousChamp?.name === c.name){
+        if(previousChamp?.name === c.name && c.name !== ""){
             return true
         }
         return false
