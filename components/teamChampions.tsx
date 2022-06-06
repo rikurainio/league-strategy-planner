@@ -163,6 +163,7 @@ const TeamChampions = ({
                     dark:bg-zinc-800 
                     relative
                     ${idx > 0 && 'mt-6'}
+                    ${idx === 2 && 'my-6'}
                     ${checkActive(c) && 'outline outline-zinc-300'}`}
                     key={teamName + '-' + idx}
                 > 
@@ -189,6 +190,7 @@ const TeamChampions = ({
                     dark:bg-zinc-800 
                     relative
                     ${idx > 0 && 'mt-6'}
+                    ${idx === 2 && 'my-6'}
                     ${checkActive(c) && 'outline outline-zinc-300'}`}
                     key={teamName + '-' + idx}
                 > 
