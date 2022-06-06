@@ -6,14 +6,20 @@ import TeamChampions from './teamChampions';
 import TeamBans from './teamBans';
 import { ChampionCtx } from './championContext';
 
+interface ChampionWithIdx extends Champion {
+    idx: number,
+    team: string
+}
+
 const ChampionsContainer = () => {
     const [filter, setFilter] = useState('')
     const [activeChamp, setActiveChamp] = useState<string>("")
     const [banneds, setBanneds] = useState([])
     const [selectedChampion, setSelectedChampion] = useState<Champion>({ name: '', image: '', splashImage: ''})
+    const [previousChamp, setPreviousChamp] = useState<ChampionWithIdx | null>(null)
+    const cm = useContext(ChampionCtx)!
     const champions: Champion[] = getAllChampions()
 
-    const cm = useContext(ChampionCtx)!
 
     const championIsDrafted = (c: Champion): boolean => {
         const blue = cm.mapChampions.blue
@@ -80,7 +86,8 @@ const ChampionsContainer = () => {
                     selectedChampion={selectedChampion} 
                     setSelectedChampion={setSelectedChampion}
                     setActiveChamp={setActiveChamp}
-
+                    setPreviousChamp={setPreviousChamp}
+                    previousChamp={previousChamp}
                 />
 
                 <div className='w-full'>
@@ -137,7 +144,8 @@ const ChampionsContainer = () => {
                     selectedChampion={selectedChampion}
                     setSelectedChampion={setSelectedChampion}
                     setActiveChamp={setActiveChamp}
-
+                    setPreviousChamp={setPreviousChamp}
+                    previousChamp={previousChamp}
                 />
             </div>
         </div>

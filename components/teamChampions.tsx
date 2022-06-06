@@ -3,21 +3,32 @@ import { Champion } from '../utils/champion';
 import { ChampionCtx } from './championContext';
 import Image from 'next/image'
 
+interface ChampionWithIdx extends Champion {
+    idx: number
+    team: string
+}
+
 interface Props {
     teamName: string,
     selectedChampion: Champion,
+    previousChamp: ChampionWithIdx | null,
+
+    setActiveChamp: (activeChamp: string) => void,
     setSelectedChampion: (selectedChampion: Champion) => void,
-    setActiveChamp: (activeChamp: string) => void
+    setPreviousChamp: (previousChamp: ChampionWithIdx | null) => void
 }
 
-interface ChampionWithIdx extends Champion {
-    idx: number
-}
+const TeamChampions = ({ 
+        teamName, 
+        selectedChampion, 
+        setSelectedChampion,
+        setActiveChamp,
+        previousChamp,
+        setPreviousChamp
+    }: Props) => {
 
-const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActiveChamp }: Props) => {
     const cm = useContext(ChampionCtx)!
     const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
-    const [previousChamp, setPreviousChamp] = useState<ChampionWithIdx | null>(null)
 
     const handleImageClick = (e: any, c: Champion ,idx: number) => {
         if(selectedChampion.splashImage){
@@ -44,37 +55,61 @@ const TeamChampions = ({teamName, selectedChampion, setSelectedChampion ,setActi
 
                     if(teamName === 'blue'){
                         if(previousChamp !== null){
-                            console.log('swapping')
-                            const copyBlue = [...cm.mapChampions.blue]
-                            const current = c
-                            const currentIdx = idx
-                            const previous = previousChamp
-    
-                            copyBlue[previous.idx] = current
-                            copyBlue[currentIdx] = previous
-                            cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
-                            setPreviousChamp(null)
+                            if(previousChamp.team === teamName){
+                                console.log('swapping')
+                                const copyBlue = [...cm.mapChampions.blue]
+                                const current = c
+                                const currentIdx = idx
+                                const previous = previousChamp
+        
+                                copyBlue[previous.idx] = current
+                                copyBlue[currentIdx] = previous
+                                cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
+                                setPreviousChamp(null)
+                            }
+                            else{
+                                const copyBlue = [...cm.mapChampions.blue]
+                                const copyRed = [...cm.mapChampions.red]
+
+                                copyRed[previousChamp.idx] = c
+                                copyBlue[idx] = previousChamp
+
+                                cm?.setMapChampions({ blue: copyBlue, red: copyRed })
+                                setPreviousChamp(null)
+                            }
                         }
                         else{
-                            const cWithIndex = {...c, idx: idx}
+                            const cWithIndex = {...c, idx: idx, team: teamName}
                             setPreviousChamp(cWithIndex)
                         }
                     }
                     if(teamName === 'red'){
                         if(previousChamp !== null){
-                            console.log('swapping')
-                            const copyRed = [...cm.mapChampions.red]
-                            const current = c
-                            const currentIdx = idx
-                            const previous = previousChamp
-    
-                            copyRed[previous.idx] = current
-                            copyRed[currentIdx] = previous
-                            cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
-                            setPreviousChamp(null)
+                            if(previousChamp.team === teamName){
+                                console.log('swapping')
+                                const copyRed = [...cm.mapChampions.red]
+                                const current = c
+                                const currentIdx = idx
+                                const previous = previousChamp
+        
+                                copyRed[previous.idx] = current
+                                copyRed[currentIdx] = previous
+                                cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
+                                setPreviousChamp(null)
+                            }
+                            else{
+                                const copyBlue = [...cm.mapChampions.blue]
+                                const copyRed = [...cm.mapChampions.red]
+
+                                copyBlue[previousChamp.idx] = c
+                                copyRed[idx] = previousChamp
+
+                                cm?.setMapChampions({ blue: copyBlue, red: copyRed })
+                                setPreviousChamp(null)
+                            }
                         }
                         else{
-                            const cWithIndex = {...c, idx: idx}
+                            const cWithIndex = {...c, idx: idx, team: teamName}
                             setPreviousChamp(cWithIndex)
                         }
                     }
