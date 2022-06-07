@@ -3,43 +3,65 @@ import { Champion } from '../utils/champion';
 import Image from 'next/image'
 import { ChampionCtx } from './championContext';
 
-interface Props {
-    teamName: string,
-    selectedChampion: Champion,
-    setSelectedChampion: (selectedChampion: Champion) => void
-    banneds: string[],
-    setBanneds: (banneds: any) => void,
-    setActiveChamp: (activeChamp: string) => void
+interface Bans {
+    blue: Champion[],
+    red: Champion[]
 }
 
-const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds, setActiveChamp }: Props) => {
-    const cm = useContext(ChampionCtx)
+interface Props {
+    teamName: string,
+    banneds: Bans,
+    selectedChampion: Champion,
+    setBanneds: (banneds: Bans) => void,
+    setActiveChamp: (activeChamp: string) => void
+    setSelectedChampion: (selectedChampion: Champion) => void
+}
 
-    const handleImageClick = (e: any, idx: number) => {
+const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
+
+const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds, setActiveChamp }: Props) => {
+    const cm = useContext(ChampionCtx)!
+    
+
+    const handleImageClick = (e: any, c: Champion, idx: number) => {
         setActiveChamp("")
 
         if(selectedChampion.image){
             // left click a draft tile
             if(e.type === 'click'){
                 if(selectedChampion.splashImage !== 'blank.webp'){
-                    (e.target as HTMLImageElement).setAttribute('srcset', selectedChampion.image);
-                    (e.target as HTMLImageElement).setAttribute('id', selectedChampion.name);
- 
-                    setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
-                    const b = [...banneds]
-                    b.push(selectedChampion.name)
-                    setBanneds(b)
+                    if(teamName === 'blue'){
+                        const copyBlue = [...banneds.blue]
+                        copyBlue[idx] = selectedChampion
+                        setBanneds({ blue: copyBlue, red: banneds.red })
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
+                    if(teamName === 'red'){
+                        const copyRed = [...banneds.red]
+                        copyRed[idx] = selectedChampion
+                        setBanneds({ blue: banneds.blue, red: copyRed })
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
                 }
             }
             // right click a draft tile
             if(e.type === "contextmenu"){
                 e.preventDefault();
-                (e.target as HTMLImageElement).setAttribute('srcset', 'blank.webp');
-    
-                const imageId = (e.target as HTMLImageElement).getAttribute('id')
-                const b = [...banneds]
-                const updatedB = b.filter((c) => c !== imageId) 
-                setBanneds(updatedB)
+
+                if(c.splashImage !== 'blank.webp'){
+                    if(teamName === 'blue'){
+                        const copyBlue = [...banneds.blue]
+                        copyBlue[idx] = blank
+                        setBanneds({ blue: copyBlue, red: banneds.red})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
+                    if(teamName === 'red'){
+                        const copyRed = [...banneds.red]
+                        copyRed[idx] = blank
+                        setBanneds({ blue: banneds.blue, red: copyRed})
+                        setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
+                    }
+                }
             }
         }
     }
@@ -54,9 +76,10 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
             py-4
             mx-4
             `}>
-            {[...Array(5)].map((e, idx) =>
+                
+            {teamName === 'blue' && banneds.blue.map((c, idx) =>
             <div
-                id={banneds[idx]}
+                id={'ban-' + c.name}
                 key={teamName + '-' + idx + 1}
                 className={`
                 dark:bg-zinc-800
@@ -70,11 +93,36 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                     id={"img-" + teamName + "-" + idx + 1}
                     width="40"
                     height="40"
-                    src={'/blank.webp'}
+                    src={c.image}
                     alt="champion-name"
                     className="cursor-pointer rounded-sm"
-                    onContextMenu={(e) => {handleImageClick(e, idx)}}
-                    onClick={(e) => {handleImageClick(e, idx)}}
+                    onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                    onClick={(e) => {handleImageClick(e, c, idx)}}
+                >
+                </Image>
+            </div>)}
+
+            {teamName === 'red' && banneds.red.map((c, idx) =>
+            <div
+                id={'ban-' + c.name}
+                key={teamName + '-' + idx + 1}
+                className={`
+                dark:bg-zinc-800
+                  rounded 
+                  h-10 
+                  w-10 
+                  m-1`
+                }
+            >  
+                <Image
+                    id={"img-" + teamName + "-" + idx + 1}
+                    width="40"
+                    height="40"
+                    src={c.image}
+                    alt="champion-name"
+                    className="cursor-pointer rounded-sm"
+                    onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                    onClick={(e) => {handleImageClick(e, c, idx)}}
                 >
                 </Image>
             </div>)}
