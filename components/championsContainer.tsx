@@ -5,6 +5,7 @@ import ChampionSearch from './championSearch';
 import TeamChampions from './teamChampions';
 import TeamBans from './teamBans';
 import { ChampionCtx } from './championContext';
+import TeamNameTitleCard from './teamNameTitleCard';
 
 interface ChampionWithIdx extends Champion {
     idx: number,
@@ -71,6 +72,14 @@ const ChampionsContainer = () => {
             dark:bg-zinc-900
             "
             >
+            <div className="flex">
+                <TeamNameTitleCard
+                    teamName="blue"
+                />
+                <TeamNameTitleCard
+                    teamName="red"
+                />
+            </div>
             <div className="flex">
                 <TeamBans
                     teamName='blue'
