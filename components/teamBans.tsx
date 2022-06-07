@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Champion } from '../utils/champion';
-import Image from 'next/image'
 import { ChampionCtx } from './championContext';
+import Image from 'next/image'
 
 interface Bans {
     blue: Champion[],
@@ -164,6 +164,7 @@ const TeamBans = ({
                 className={`
                 dark:bg-zinc-800
                   rounded
+                  ${idx === 2 && 'mr-8'}
                   ${checkActive(c) && 'outline outline-2 outline-zinc-300'}
                   h-10 
                   w-10 
@@ -190,6 +191,7 @@ const TeamBans = ({
                 className={`
                 dark:bg-zinc-800
                   rounded
+                  ${idx === 1 && 'mr-8'}
                   ${checkActive(c) && 'outline outline-2 outline-zinc-300'}
                   h-10 
                   w-10 
