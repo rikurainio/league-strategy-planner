@@ -65,6 +65,7 @@ const ChampionsContainer = () => {
 
     return (
         <div className="
+            mx-10
             w-full
             flex flex-col
             border-l-8 border-l-blue-500
