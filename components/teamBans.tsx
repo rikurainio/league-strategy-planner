@@ -42,7 +42,7 @@ const TeamBans = ({
 
         if(selectedChampion.image){
             // left click a draft tile
-            if(e.type === 'click'){
+            if(e.type === 'mousedown'){
                 if(selectedChampion.splashImage !== 'blank.webp'){
                     if(teamName === 'blue'){
                         const copyBlue = [...banneds.blue]
@@ -178,7 +178,7 @@ const TeamBans = ({
                     alt="champion-name"
                     className="cursor-pointer rounded-sm"
                     onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                    onClick={(e) => {handleImageClick(e, c, idx)}}
+                    onMouseDown={(e) => {handleImageClick(e, c, idx)}}
                 >
                 </Image>
             </div>)}
@@ -204,7 +204,7 @@ const TeamBans = ({
                     alt="champion-name"
                     className="cursor-pointer rounded-sm"
                     onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                    onClick={(e) => {handleImageClick(e, c, idx)}}
+                    onMouseDown={(e) => {handleImageClick(e, c, idx)}}
                 >
                 </Image>
             </div>)}
