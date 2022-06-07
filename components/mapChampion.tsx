@@ -22,19 +22,21 @@ const MapChampion = ({ teamName, champion, spawnPoint }: MapChampionProps) => {
                 rounded-full
                 border-2
                 cursor-pointer
+                overflow-hidden
                 hover:brightness-125
-                z-50
                 ${teamName === 'blue'
                 ? 'border-blue-500 bg-blue-500'
                 : 'border-red-600 bg-red-600'}`}
             >
                 <Image
                     className="
+                        scale-110
                         rounded-full 
                         cursor-none
                         pointer-events-none
-                        z-0"
+                    "
                     layout="fill"
+                    objectPosition={""}
                     alt={champion.name}
                     src={champion.image}
                 >
