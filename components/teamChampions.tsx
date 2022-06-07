@@ -159,8 +159,7 @@ const TeamChampions = ({
                         content-center justify-center
                         bg-zinc-800
                         ${idx > 0 && 'mt-6'}
-                        ${idx === 2 && 'my-6'}
-                        `}
+                        ${idx === 2 && 'my-6'}`}
                     >
                         <div>B{idx+1}</div>
                     </div>
