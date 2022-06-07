@@ -113,8 +113,6 @@ const TeamChampions = ({
                             setPreviousChamp(cWithIndex)
                         }
                     }
-
-                    
                     setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                 }
             }

@@ -11,15 +11,22 @@ interface ChampionWithIdx extends Champion {
     team: string
 }
 
+interface Bans {
+    blue: Champion[],
+    red: Champion[]
+}
+
+const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
+const filled5 = Array(5).fill(blank)
+
 const ChampionsContainer = () => {
     const [filter, setFilter] = useState('')
     const [activeChamp, setActiveChamp] = useState<string>("")
-    const [banneds, setBanneds] = useState([])
+    const [banneds, setBanneds] = useState<Bans>({ blue: filled5, red: filled5 })
     const [selectedChampion, setSelectedChampion] = useState<Champion>({ name: '', image: '', splashImage: ''})
     const [previousChamp, setPreviousChamp] = useState<ChampionWithIdx | null>(null)
     const cm = useContext(ChampionCtx)!
     const champions: Champion[] = getAllChampions()
-
 
     const championIsDrafted = (c: Champion): boolean => {
         const blue = cm.mapChampions.blue
@@ -33,7 +40,8 @@ const ChampionsContainer = () => {
     }
 
     const championIsBanned = (c: Champion): boolean => {
-        const found = banneds.filter((ch) => (ch === c.name))
+        const bansCombined = banneds.blue.concat(banneds.red)
+        const found = bansCombined.filter((ch) => (ch.name === c.name))
         if(found !== undefined && found.length > 0){
             return true 
         }
