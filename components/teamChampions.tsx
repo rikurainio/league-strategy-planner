@@ -44,7 +44,7 @@ const TeamChampions = ({
     const handleImageClick = (e: any, c: Champion ,idx: number) => {
         if(selectedChampion.splashImage){
             // left click a draft tile
-            if(e.type === 'click' || e.type === 'mousedown'){
+            if(e.type === 'click'){
                 setActiveChamp("")
                 if(selectedChampion.splashImage !== 'blank.webp'){
                     if(teamName === 'blue'){
@@ -112,7 +112,7 @@ const TeamChampions = ({
                 }
             }
             // right click a draft tile
-            if(e.type === "contextmenu"){
+            else if(e.type === "contextmenu"){
                 e.preventDefault();
 
                 if(c.splashImage !== 'blank.webp'){
@@ -173,7 +173,7 @@ const TeamChampions = ({
                         alt="champion name"
                         className="cursor-pointer"
                         onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                        onMouseDown={(e) => {handleImageClick(e, c, idx)}}
+                        onClick={(e) => {handleImageClick(e, c, idx)}}
                     >
                     </Image>
                     
@@ -201,7 +201,7 @@ const TeamChampions = ({
                         alt="champion name"
                         className="cursor-pointer"
                         onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                        onMouseDown={(e) => {handleImageClick(e, c, idx)}}
+                        onClick={(e) => {handleImageClick(e, c, idx)}}
                     >
                     </Image>
             </div>)}
