@@ -86,7 +86,6 @@ const TeamChampions = ({
                         else{
                             if(previousChamp.type === 'ban'){
                                 const copyTeamPicks = cm.mapChampions[teamName]
-
                                 const cmCopy = {...cm.mapChampions}
                                 const prevTeamCopy = [...banneds[previousChamp.team]]
                                 const copyBanneds = {...banneds}
@@ -150,60 +149,93 @@ const TeamChampions = ({
             `} 
         >
             {teamName === 'blue' && cm?.mapChampions.blue.map((c, idx) =>
-            <div
-                className={`
-                    w-60 h-[6rem] 
-                    dark:bg-zinc-800 
-                    relative
-                    ${idx > 0 && 'mt-6'}
-                    ${idx === 2 && 'my-6'}
-                    ${checkActive(c) && 'outline outline-zinc-300'}`}
+                <div
                     key={teamName + '-' + idx}
-                > 
-
-                    <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
-                        {c.name}
-                    </div>
-                    <Image
-                        id={"blank"}
-                        layout='fill'
-                        objectFit='cover'
-                        objectPosition={'0px -12px'}
-                        src={c.splashImage}
-                        alt="champion name"
-                        className="cursor-pointer"
-                        onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                        onClick={(e) => {handleImageClick(e, c, idx)}}
+                    className="flex"    
+                >
+                    <div className={`
+                        px-1
+                        flex flex-col
+                        content-center justify-center
+                        bg-zinc-800
+                        ${idx > 0 && 'mt-6'}
+                        ${idx === 2 && 'my-6'}
+                        `}
                     >
-                    </Image>
-                    
-            </div>)}
+                        <div>B{idx+1}</div>
+                    </div>
+                    <div 
+                        className={`
+                            w-60 h-[6rem] 
+                            dark:bg-zinc-800 
+                            relative
+                            ${idx > 0 && 'mt-6'}
+                            ${idx === 2 && 'my-6'}
+                            ${checkActive(c) && 'outline outline-zinc-300'}`}
+                        > 
+
+                            <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
+                                {c.name}
+                            </div>
+                            <Image
+                                id={"blank"}
+                                layout='fill'
+                                objectFit='cover'
+                                objectPosition={'0px -12px'}
+                                src={c.splashImage}
+                                alt="champion name"
+                                className="cursor-pointer"
+                                onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                                onClick={(e) => {handleImageClick(e, c, idx)}}
+                            >
+                            </Image>
+                    </div>
+                </div>
+                
+            )}
+
+
             {teamName === 'red' && cm?.mapChampions.red.map((c, idx) =>
             <div
-                className={`
-                    w-60 h-[6rem] 
-                    dark:bg-zinc-800 
-                    relative
+                key={teamName + '-' + idx}
+                className="flex"
+            >   
+                <div
+                    className={`
+                        w-60 h-[6rem] 
+                        dark:bg-zinc-800 
+                        relative
+                        ${idx > 0 && 'mt-6'}
+                        ${idx === 2 && 'my-6'}
+                        ${checkActive(c) && 'outline outline-zinc-300'}`}
+                    > 
+                        <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
+                            {c.name}
+                        </div>
+                        <Image
+                            id={"blank"}
+                            layout='fill'
+                            objectFit='cover'
+                            objectPosition={'0px -12px'}
+                            src={c.splashImage}
+                            alt="champion name"
+                            className="cursor-pointer"
+                            onContextMenu={(e) => {handleImageClick(e, c, idx)}}
+                            onClick={(e) => {handleImageClick(e, c, idx)}}
+                        >
+                        </Image>
+                </div>
+
+                <div className={`
+                    px-1
+                    flex flex-col
+                    content-center justify-center
+                    bg-zinc-800
                     ${idx > 0 && 'mt-6'}
-                    ${idx === 2 && 'my-6'}
-                    ${checkActive(c) && 'outline outline-zinc-300'}`}
-                    key={teamName + '-' + idx}
-                > 
-                    <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
-                        {c.name}
-                    </div>
-                    <Image
-                        id={"blank"}
-                        layout='fill'
-                        objectFit='cover'
-                        objectPosition={'0px -12px'}
-                        src={c.splashImage}
-                        alt="champion name"
-                        className="cursor-pointer"
-                        onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                        onClick={(e) => {handleImageClick(e, c, idx)}}
-                    >
-                    </Image>
+                    ${idx === 2 && 'my-6'}`}
+                >
+                    <div>R{idx+1}</div>
+                </div>
             </div>)}
         </div>
     )
