@@ -17,13 +17,16 @@ const TeamNameTitleCard = ({ teamName }: TeamNameTitleCardProps) => {
                 ? 'justify-start text-left' 
                 : 'justify-end text-right'}`}
     >
-        <input className={
-            `rounded-sm
-            px-2 py-1
-            ${teamName === 'blue'
-                ? 'text-left' 
-                : 'text-right'}
-            `}>
+        <input
+            className={
+                `rounded-sm
+                px-2 py-1
+                ${teamName === 'blue'
+                    ? 'text-left' 
+                    : 'text-right'}
+                `}
+            placeholder={`${teamName === 'blue' ? 'Blue name' : 'Red name'}`}
+        >
         </input>
     </div>
   )
