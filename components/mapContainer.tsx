@@ -19,7 +19,7 @@ export const MapContainer = () => {
   return (
     <div className="flex flex-col content-center w-full relative m-5">
           <Image
-            className="pointer-events-none opacity-0"
+            className="pointer-events-none opacity-100"
             alt="SR"
             src={"/sr-alcove.png"}
             layout="fill"
