@@ -6,19 +6,30 @@ import Image from 'next/image'
 interface ChampionWithIdx extends Champion {
     idx: number
     team: string
+    type: string
+}
+
+interface Bans {
+    blue: Champion[],
+    red: Champion[],
+    [key: string]: Champion[]
 }
 
 interface Props {
+    banneds: Bans,
     teamName: string,
     selectedChampion: Champion,
     previousChamp: ChampionWithIdx | null,
 
+    setBanneds: (banneds: Bans) => void,
     setActiveChamp: (activeChamp: string) => void,
     setSelectedChampion: (selectedChampion: Champion) => void,
     setPreviousChamp: (previousChamp: ChampionWithIdx | null) => void
 }
 
-const TeamChampions = ({ 
+const TeamChampions = ({
+        banneds,
+        setBanneds,
         teamName, 
         selectedChampion, 
         setSelectedChampion,
@@ -53,65 +64,49 @@ const TeamChampions = ({
                     // clicked on a tile with champ
                     setSelectedChampion(c)
 
-                    if(teamName === 'blue'){
-                        if(previousChamp !== null){
-                            if(previousChamp.team === teamName){
-                                console.log('swapping')
-                                const copyBlue = [...cm.mapChampions.blue]
-                                const current = c
-                                const currentIdx = idx
-                                const previous = previousChamp
-        
-                                copyBlue[previous.idx] = current
-                                copyBlue[currentIdx] = previous
-                                cm?.setMapChampions({ blue: copyBlue, red: cm.mapChampions.red})
-                                setPreviousChamp(null)
-                            }
-                            else{
-                                const copyBlue = [...cm.mapChampions.blue]
-                                const copyRed = [...cm.mapChampions.red]
+                    if(previousChamp !== null){
+                        if(previousChamp.type === 'pick'){
+                            console.log('swapping')
+                            const copyTeamPicks = cm.mapChampions[teamName]
+                            const copyPreviousTeamPicks = cm.mapChampions[previousChamp.team]
+                            const current = c
+                            const currentIdx = idx
+                            const previous = previousChamp
+    
+                            copyTeamPicks[currentIdx] = previousChamp
+                            copyPreviousTeamPicks[previousChamp.idx] = current
 
-                                copyRed[previousChamp.idx] = c
-                                copyBlue[idx] = previousChamp
+                            const cmCopy = {...cm.mapChampions}
+                            cmCopy[previousChamp.team] = copyPreviousTeamPicks
+                            cmCopy[teamName] = copyTeamPicks
 
-                                cm?.setMapChampions({ blue: copyBlue, red: copyRed })
-                                setPreviousChamp(null)
-                            }
+                            cm?.setMapChampions(cmCopy)
+                            setPreviousChamp(null)
                         }
                         else{
-                            const cWithIndex = {...c, idx: idx, team: teamName}
-                            setPreviousChamp(cWithIndex)
+                            if(previousChamp.type === 'ban'){
+                                const copyTeamPicks = cm.mapChampions[teamName]
+
+                                const cmCopy = {...cm.mapChampions}
+                                const prevTeamCopy = [...banneds[previousChamp.team]]
+                                const copyBanneds = {...banneds}
+
+                                prevTeamCopy[previousChamp.idx] = c
+                                copyTeamPicks[idx] = previousChamp
+
+                                cmCopy[teamName] = copyTeamPicks
+
+                                copyBanneds[previousChamp.team] = prevTeamCopy
+                                cm.setMapChampions(cmCopy)
+
+                                setBanneds(copyBanneds)
+                                setPreviousChamp(null)
+                            }
                         }
                     }
-                    if(teamName === 'red'){
-                        if(previousChamp !== null){
-                            if(previousChamp.team === teamName){
-                                console.log('swapping')
-                                const copyRed = [...cm.mapChampions.red]
-                                const current = c
-                                const currentIdx = idx
-                                const previous = previousChamp
-        
-                                copyRed[previous.idx] = current
-                                copyRed[currentIdx] = previous
-                                cm?.setMapChampions({ blue: cm.mapChampions.blue, red: copyRed})
-                                setPreviousChamp(null)
-                            }
-                            else{
-                                const copyBlue = [...cm.mapChampions.blue]
-                                const copyRed = [...cm.mapChampions.red]
-
-                                copyBlue[previousChamp.idx] = c
-                                copyRed[idx] = previousChamp
-
-                                cm?.setMapChampions({ blue: copyBlue, red: copyRed })
-                                setPreviousChamp(null)
-                            }
-                        }
-                        else{
-                            const cWithIndex = {...c, idx: idx, team: teamName}
-                            setPreviousChamp(cWithIndex)
-                        }
+                    else{
+                        const cWithIndex = {...c, idx: idx, team: teamName, type: 'pick'}
+                        setPreviousChamp(cWithIndex)
                     }
                     setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                 }
@@ -165,6 +160,7 @@ const TeamChampions = ({
                     ${checkActive(c) && 'outline outline-zinc-300'}`}
                     key={teamName + '-' + idx}
                 > 
+
                     <div id={"btext-" + idx} className={`absolute z-50 ml-2 m-1`}>
                         {c.name}
                     </div>
@@ -180,6 +176,7 @@ const TeamChampions = ({
                         onClick={(e) => {handleImageClick(e, c, idx)}}
                     >
                     </Image>
+                    
             </div>)}
             {teamName === 'red' && cm?.mapChampions.red.map((c, idx) =>
             <div

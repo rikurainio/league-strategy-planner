@@ -4,7 +4,8 @@ import { Champion } from '../utils/champion'
 
 interface MapChampions {
     blue: Champion[],
-    red: Champion[]
+    red: Champion[],
+    [key: string]: Champion[]
 }
 
 type ChampionContext = {

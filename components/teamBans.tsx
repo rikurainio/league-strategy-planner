@@ -5,23 +5,37 @@ import { ChampionCtx } from './championContext';
 
 interface Bans {
     blue: Champion[],
-    red: Champion[]
+    red: Champion[],
+    [key: string]: Champion[]
+}
+
+interface ChampionWithIdx extends Champion {
+    idx: number
+    team: string
+    type: string
 }
 
 interface Props {
     teamName: string,
     banneds: Bans,
+    previousChamp: ChampionWithIdx | null,
     selectedChampion: Champion,
     setBanneds: (banneds: Bans) => void,
     setActiveChamp: (activeChamp: string) => void
+    setPreviousChamp: (previousChamp: ChampionWithIdx | null) => void
     setSelectedChampion: (selectedChampion: Champion) => void
 }
 
 const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
 
-const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, setBanneds, setActiveChamp }: Props) => {
+const TeamBans = ({
+    teamName, 
+    selectedChampion, 
+    setSelectedChampion,
+    previousChamp, setPreviousChamp, 
+    banneds, setBanneds, setActiveChamp }: Props) => {
+
     const cm = useContext(ChampionCtx)!
-    
 
     const handleImageClick = (e: any, c: Champion, idx: number) => {
         setActiveChamp("")
@@ -43,7 +57,66 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                         setSelectedChampion({ name: '', image: 'blank.webp', splashImage: 'blank.webp'})
                     }
                 }
+                // clicked on a tile with champ
+                else{
+                    if(previousChamp !== null){
+                        if(previousChamp.team === teamName && previousChamp.type === 'ban'){
+                            const copyTeamBans =  [...banneds[teamName]]
+                            const current = c
+                            const currentIdx = idx
+                            const previous = previousChamp
+
+                            copyTeamBans[previous.idx] = current
+                            copyTeamBans[currentIdx] = previous
+
+                            const copyBanneds = {...banneds}
+                            copyBanneds[teamName] = copyTeamBans
+                            setBanneds(copyBanneds)
+                            setPreviousChamp(null)
+                        }
+                        if(teamName !== previousChamp.team && previousChamp.type === 'ban'){
+                            const copyTeamBans = [...banneds[teamName]]
+                            const copyPreviousTeamBans = [...banneds[previousChamp.team]]
+                            const copyBanneds = {...banneds}
+                            const current = c
+                            const previous = previousChamp
+
+                            copyTeamBans[idx] = previousChamp
+                            copyPreviousTeamBans[previousChamp.idx] = current
+
+                            copyBanneds[teamName] = copyTeamBans
+                            copyBanneds[previousChamp.team] = copyPreviousTeamBans
+
+                            setBanneds(copyBanneds)
+                            setPreviousChamp(null)
+                        }
+                        else{   
+                            if(previousChamp.type === 'pick'){
+                                const copyTeamBans =  [...banneds[teamName]]
+
+                                const cmCopy = {...cm.mapChampions}
+                                const prevTeamCopy = cm.mapChampions[previousChamp.team]
+                                const copyBanneds = {...banneds}
+
+                                copyBanneds[teamName] = copyTeamBans
+                                prevTeamCopy[previousChamp.idx] = c
+                                copyTeamBans[idx] = previousChamp
+
+                                cmCopy[previousChamp.team] = prevTeamCopy
+                                cm.setMapChampions(cmCopy)
+                                
+                                setBanneds(copyBanneds)
+                                setPreviousChamp(null)
+                            }
+                        } 
+                    }
+                    else{
+                        const cWithIndex = {...c, idx: idx, team: teamName,type: 'ban'}
+                        setPreviousChamp(cWithIndex)
+                    }
+                }
             }
+            
             // right click a draft tile
             if(e.type === "contextmenu"){
                 e.preventDefault();
@@ -66,6 +139,13 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
         }
     }
 
+    const checkActive = (c: Champion): boolean => {
+        if(previousChamp?.name === c.name && c.name !== ""){
+            return true
+        }
+        return false
+    }
+
     return (
         <div className={`
             flex
@@ -83,7 +163,8 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                 key={teamName + '-' + idx + 1}
                 className={`
                 dark:bg-zinc-800
-                  rounded 
+                  rounded
+                  ${checkActive(c) && 'outline outline-2 outline-zinc-300'}
                   h-10 
                   w-10 
                   m-1`
@@ -108,7 +189,8 @@ const TeamBans = ({teamName, selectedChampion, setSelectedChampion, banneds, set
                 key={teamName + '-' + idx + 1}
                 className={`
                 dark:bg-zinc-800
-                  rounded 
+                  rounded
+                  ${checkActive(c) && 'outline outline-2 outline-zinc-300'}
                   h-10 
                   w-10 
                   m-1`

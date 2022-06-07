@@ -8,12 +8,14 @@ import { ChampionCtx } from './championContext';
 
 interface ChampionWithIdx extends Champion {
     idx: number,
-    team: string
+    team: string,
+    type: string
 }
 
 interface Bans {
     blue: Champion[],
-    red: Champion[]
+    red: Champion[],
+    [key: string]: Champion[]
 }
 
 const blank = {name: "", image: "/blank.webp", splashImage: "/blank.webp"}
@@ -74,6 +76,8 @@ const ChampionsContainer = () => {
                     teamName='blue'
                     selectedChampion={selectedChampion} 
                     setSelectedChampion={setSelectedChampion}
+                    previousChamp={previousChamp}
+                    setPreviousChamp={setPreviousChamp}
                     banneds={banneds}
                     setBanneds={setBanneds}
                     setActiveChamp={setActiveChamp}
@@ -82,6 +86,8 @@ const ChampionsContainer = () => {
                     teamName='red'
                     selectedChampion={selectedChampion} 
                     setSelectedChampion={setSelectedChampion}
+                    previousChamp={previousChamp}
+                    setPreviousChamp={setPreviousChamp}
                     banneds={banneds}
                     setBanneds={setBanneds}
                     setActiveChamp={setActiveChamp}
@@ -90,6 +96,8 @@ const ChampionsContainer = () => {
 
             <div id="champions-container" className="flex justify-center h-[40rem] w-full">
                 <TeamChampions
+                    banneds={banneds}
+                    setBanneds={setBanneds}
                     teamName='blue'
                     selectedChampion={selectedChampion} 
                     setSelectedChampion={setSelectedChampion}
@@ -148,6 +156,8 @@ const ChampionsContainer = () => {
                 </div>
 
                 <TeamChampions
+                    banneds={banneds}
+                    setBanneds={setBanneds}
                     teamName='red'
                     selectedChampion={selectedChampion}
                     setSelectedChampion={setSelectedChampion}
