@@ -13,6 +13,13 @@ interface ChampionWithIdx extends Champion {
     type: string
 }
 
+/*
+interface ChampionsContainerProps {
+    hideDraftTab: boolean,
+    setHideDraftTab: (hideDraftTab: boolean) => void
+}
+*/
+
 interface Bans {
     blue: Champion[],
     red: Champion[],
@@ -64,117 +71,119 @@ const ChampionsContainer = () => {
     }
 
     return (
-        <div className="
-            mx-10
-            w-full
-            flex flex-col
-            border-l-8 border-l-blue-500
-            border-r-8 border-r-red-500
-            dark:bg-zinc-900
-            "
-            >
-            <div className="flex">
-                <TeamNameTitleCard
-                    teamName="blue"
-                />
-                <TeamNameTitleCard
-                    teamName="red"
-                />
-            </div>
-            <div className="flex">
-                <TeamBans
-                    teamName='blue'
-                    selectedChampion={selectedChampion} 
-                    setSelectedChampion={setSelectedChampion}
-                    previousChamp={previousChamp}
-                    setPreviousChamp={setPreviousChamp}
-                    banneds={banneds}
-                    setBanneds={setBanneds}
-                    setActiveChamp={setActiveChamp}
-                />
-                <TeamBans
-                    teamName='red'
-                    selectedChampion={selectedChampion} 
-                    setSelectedChampion={setSelectedChampion}
-                    previousChamp={previousChamp}
-                    setPreviousChamp={setPreviousChamp}
-                    banneds={banneds}
-                    setBanneds={setBanneds}
-                    setActiveChamp={setActiveChamp}
-                />
-            </div>
-
-            <div id="champions-container" className="flex justify-center h-[40rem] w-full">
-                <TeamChampions
-                    banneds={banneds}
-                    setBanneds={setBanneds}
-                    teamName='blue'
-                    selectedChampion={selectedChampion} 
-                    setSelectedChampion={setSelectedChampion}
-                    setActiveChamp={setActiveChamp}
-                    setPreviousChamp={setPreviousChamp}
-                    previousChamp={previousChamp}
-                />
-
-                <div className='w-full'>
-                    <div className="h-9 mb-2">
-                        <ChampionSearch filter={filter} setFilter={setFilter} />
-                    </div>
-
-                    <div className="flex justify-center flex-wrap max-h-[33rem] overflow-y-scroll">
-                    {champions
-                        .filter((c) => c.name.toLowerCase().includes(filter))
-                        .sort((c, d) => c.name.localeCompare(d.name))
-                        .map((c) =>
-                    <div
-                        key={'champion-' + c.name}
-                        className={`
-                            m-1
-                            w-24
-                            ${championIsBanned(c) ? ' saturate-0 pointer-events-none ' : ' ' } 
-                            ${championIsDrafted(c) ? ' saturate-0 pointer-events-none ' : ' ' }`
-                        }
-
-                        onClick={(e) => {handleClickChampion(e,c)}}
-                    >
-                        <Image
-                            src={c.image}
-                            width="76"
-                            height="76"
-                            className={`
-                                cursor-pointer
-                                rounded-lg
-                                hover:brightness-125
-                                hover:scale-100
-                                z-40
-                                ${isActiveChamp(c) ? 'outline outline-zinc-300' : ''}`
-                            }
-                            alt={c.name}>
-                        </Image>
-
-                        <div className={`
-                            w-full 
-                            truncate 
-                            dark:text-gray-300 
-                            -mt-2
-                            `}>
-                            {c.name}
-                        </div>
-                    </div>
-                    )}
-                    </div>
+        <div className="flex w-full h-full">
+            <div className="
+                mx-10
+                w-full
+                flex flex-col
+                border-l-8 border-l-blue-500
+                border-r-8 border-r-red-500
+                dark:bg-zinc-900
+                "
+                >
+                <div className="flex">
+                    <TeamNameTitleCard
+                        teamName="blue"
+                    />
+                    <TeamNameTitleCard
+                        teamName="red"
+                    />
+                </div>
+                <div className="flex">
+                    <TeamBans
+                        teamName='blue'
+                        selectedChampion={selectedChampion} 
+                        setSelectedChampion={setSelectedChampion}
+                        previousChamp={previousChamp}
+                        setPreviousChamp={setPreviousChamp}
+                        banneds={banneds}
+                        setBanneds={setBanneds}
+                        setActiveChamp={setActiveChamp}
+                    />
+                    <TeamBans
+                        teamName='red'
+                        selectedChampion={selectedChampion} 
+                        setSelectedChampion={setSelectedChampion}
+                        previousChamp={previousChamp}
+                        setPreviousChamp={setPreviousChamp}
+                        banneds={banneds}
+                        setBanneds={setBanneds}
+                        setActiveChamp={setActiveChamp}
+                    />
                 </div>
 
-                <TeamChampions
-                    banneds={banneds}
-                    setBanneds={setBanneds}
-                    teamName='red'
-                    selectedChampion={selectedChampion}
-                    setSelectedChampion={setSelectedChampion}
-                    setActiveChamp={setActiveChamp}
-                    setPreviousChamp={setPreviousChamp}
-                    previousChamp={previousChamp}
-                />
+                <div id="champions-container" className="flex justify-center h-[40rem] w-full">
+                    <TeamChampions
+                        banneds={banneds}
+                        setBanneds={setBanneds}
+                        teamName='blue'
+                        selectedChampion={selectedChampion} 
+                        setSelectedChampion={setSelectedChampion}
+                        setActiveChamp={setActiveChamp}
+                        setPreviousChamp={setPreviousChamp}
+                        previousChamp={previousChamp}
+                    />
+
+                    <div className='w-full'>
+                        <div className="h-9 mb-2">
+                            <ChampionSearch filter={filter} setFilter={setFilter} />
+                        </div>
+
+                        <div className="flex justify-center flex-wrap max-h-[33rem] overflow-y-scroll">
+                        {champions
+                            .filter((c) => c.name.toLowerCase().includes(filter))
+                            .sort((c, d) => c.name.localeCompare(d.name))
+                            .map((c) =>
+                        <div
+                            key={'champion-' + c.name}
+                            className={`
+                                m-1
+                                w-24
+                                ${championIsBanned(c) ? ' saturate-0 pointer-events-none ' : ' ' } 
+                                ${championIsDrafted(c) ? ' saturate-0 pointer-events-none ' : ' ' }`
+                            }
+
+                            onClick={(e) => {handleClickChampion(e,c)}}
+                        >
+                            <Image
+                                src={c.image}
+                                width="76"
+                                height="76"
+                                className={`
+                                    cursor-pointer
+                                    rounded-lg
+                                    hover:brightness-125
+                                    hover:scale-100
+                                    z-40
+                                    ${isActiveChamp(c) ? 'outline outline-zinc-300' : ''}`
+                                }
+                                alt={c.name}>
+                            </Image>
+
+                            <div className={`
+                                w-full 
+                                truncate 
+                                dark:text-gray-300 
+                                -mt-2
+                                `}>
+                                {c.name}
+                            </div>
+                        </div>
+                        )}
+                        </div>
+                    </div>
+
+                    <TeamChampions
+                        banneds={banneds}
+                        setBanneds={setBanneds}
+                        teamName='red'
+                        selectedChampion={selectedChampion}
+                        setSelectedChampion={setSelectedChampion}
+                        setActiveChamp={setActiveChamp}
+                        setPreviousChamp={setPreviousChamp}
+                        previousChamp={previousChamp}
+                    />
+                </div>
             </div>
         </div>
     )

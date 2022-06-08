@@ -3,7 +3,11 @@ import React, { useContext, useState } from 'react'
 import { ChampionCtx } from './championContext'
 import MapChampion from './mapChampion'
 
-export const MapContainer = () => {
+interface MapContainerProps {
+  hideDraftTab: boolean
+}
+
+export const MapContainer = ({ hideDraftTab }: MapContainerProps) => {
   const cm = useContext(ChampionCtx)
   const champions = cm?.mapChampions!
 
@@ -17,12 +21,22 @@ export const MapContainer = () => {
   }
 
   return (
-    <div className="flex flex-col content-center w-full relative m-5">
+    <div className={`
+      flex flex-col
+      content-center 
+      w-full
+      relative 
+      ${hideDraftTab && 'w-[2000px] h-[1000px]'}
+      ${hideDraftTab && 'm-0'}
+      `}>
           <Image
             className="pointer-events-none opacity-100"
             alt="SR"
-            src={"/sr-alcove.png"}
             layout="fill"
+            objectFit={hideDraftTab === true ? 'contain' : 'contain'}
+            src={hideDraftTab === true ? '/SRFull.jpg' : '/sr-alcove.png'}
+            width={hideDraftTab === true ? '2440px' : '2560px'}
+            height={hideDraftTab === true ? '2048px' : '1440px'}
           >
           </Image>
 

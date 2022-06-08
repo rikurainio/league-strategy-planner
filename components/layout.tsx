@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Navbar from './navbar'
 import Footer from './footer'
+import GlobalContext from './globalContext';
 
 type Props = {
     children?: ReactNode
@@ -10,11 +11,14 @@ type Props = {
 const Layout = ({ children }: Props ) => {
   return (
     <>
-      <Navbar />
-        <main>
+      <GlobalContext>
+        <Navbar />
+          <main>
             {children}
-        </main>
-      <Footer />
+          </main>
+        <Footer />
+      </GlobalContext>
+      
     </>
   )
 }
