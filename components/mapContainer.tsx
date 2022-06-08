@@ -23,10 +23,11 @@ export const MapContainer = ({ hideDraftTab }: MapContainerProps) => {
   return (
     <div className={`
       flex flex-col
-      content-center 
+      content-center
       w-full
-      relative 
-      ${hideDraftTab && 'w-[2000px] h-[1000px]'}
+      relative
+      ${hideDraftTab && '-mt-[140px]'}
+      ${hideDraftTab && 'w-[1500px] h-[1110px]'}
       ${hideDraftTab && 'm-0'}
       `}>
           <Image
@@ -35,8 +36,8 @@ export const MapContainer = ({ hideDraftTab }: MapContainerProps) => {
             layout="fill"
             objectFit={hideDraftTab === true ? 'contain' : 'contain'}
             src={hideDraftTab === true ? '/SRFull.jpg' : '/sr-alcove.png'}
-            width={hideDraftTab === true ? '2440px' : '2560px'}
-            height={hideDraftTab === true ? '2048px' : '1440px'}
+            width={hideDraftTab === true ? '12000px' : '2560px'}
+            height={hideDraftTab === true ? '10000px' : '1440px'}
           >
           </Image>
 
