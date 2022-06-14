@@ -151,12 +151,16 @@ const TeamChampions = ({
             {teamName === 'blue' && cm?.mapChampions.blue.map((c, idx) =>
                 <div
                     key={teamName + '-' + idx}
+                    onClick={(e) => {handleImageClick(e, c, idx)}}
+                    onContextMenu={(e) => {handleImageClick(e, c, idx)}}
                     className="flex hover:brightness-110 duration-150"    
                 >
-                    <div className={`
+                    <div
+                        className={`
                         px-1
                         flex flex-col
                         content-center justify-center
+                        pointer-events-none
                         bg-zinc-800
                         ${idx > 0 && 'mt-6'}
                         ${idx === 2 && 'my-6'}`}
@@ -166,7 +170,8 @@ const TeamChampions = ({
                     <div 
                         className={`
                             w-60 h-[6rem] 
-                            dark:bg-zinc-800 
+                            dark:bg-zinc-800
+                            pointer-events-none
                             relative
                             ${idx > 0 && 'mt-6'}
                             ${idx === 2 && 'my-6'}
@@ -183,9 +188,7 @@ const TeamChampions = ({
                                 objectPosition={'0px -12px'}
                                 src={c.splashImage}
                                 alt="champion name"
-                                className="cursor-pointer"
-                                onContextMenu={(e) => {handleImageClick(e, c, idx)}}
-                                onClick={(e) => {handleImageClick(e, c, idx)}}
+                                className="pointer-events-none"
                             >
                             </Image>
                     </div>
