@@ -151,7 +151,7 @@ const TeamChampions = ({
             {teamName === 'blue' && cm?.mapChampions.blue.map((c, idx) =>
                 <div
                     key={teamName + '-' + idx}
-                    className="flex"    
+                    className="flex hover:brightness-110 duration-150"    
                 >
                     <div className={`
                         px-1
@@ -197,7 +197,7 @@ const TeamChampions = ({
             {teamName === 'red' && cm?.mapChampions.red.map((c, idx) =>
             <div
                 key={teamName + '-' + idx}
-                className="flex"
+                className="flex hover:brightness-110 duration-150"
             >   
                 <div
                     className={`
