@@ -11,21 +11,26 @@ const Home: NextPage = () => {
   return (
     <div
       id="root-container"
-      className="flex flex-col w-screen h-full min-h-screen">
-          <div className="w-full h-full flex justify-center p-2">
-
+      className={`
+        flex 
+        flex-col
+        w-screen 
+        h-full 
+        min-h-screen 
+        overflow-hidden
+      `}
+      >
+          <div className="w-full h-full flex justify-center overflow-hidden mt-2">
               <ChampionContext>
                 <>
                 { !gc.hideDraftTab &&
                   <ChampionsContainer/>
                 }
                 </>
-                
                 <MapContainer
                   hideDraftTab={gc.hideDraftTab}
                 />
               </ChampionContext>
-              
           </div>
     </div>
   )
